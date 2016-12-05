@@ -5,18 +5,28 @@ package com.example.y.moneymanager;
  */
 
 public class Dataprovider {
+    private String year;
     private String month;
     private String week;
     private String date;
     private String category;
     private String amount;
-    public Dataprovider(String month,String week,String date,String category,String amount){
+    public Dataprovider(String year,String month,String week,String date,String category,String amount){
+        this.year = year;
         this.month = month;
         this.week = week;
         this.date = date;
         this.category = category;
         this.amount = amount;
 
+    }
+
+    public String getYear() {
+        return year;
+    }
+
+    public void setYear(String year) {
+        this.year = year;
     }
 
     public String getMonth() {

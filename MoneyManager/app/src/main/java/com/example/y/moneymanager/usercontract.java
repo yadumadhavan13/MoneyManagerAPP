@@ -6,6 +6,7 @@ package com.example.y.moneymanager;
 
 public class usercontract {
     public static abstract class newuserinfo{
+        public static final String EXPENSE_YEAR = "expense_year";
         public static final String EXPENSE_MONTH = "expense_month";
         public static final String EXPENSE_WEEK = "expense_week";
         public static final String EXPENSE_DATE = "expense_date";

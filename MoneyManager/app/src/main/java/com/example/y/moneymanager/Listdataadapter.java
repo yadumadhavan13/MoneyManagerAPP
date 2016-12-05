@@ -48,6 +48,7 @@ public class Listdataadapter extends ArrayAdapter {
             LayoutInflater layoutInflater =(LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             row = layoutInflater.inflate(R.layout.row_view,parent,false);
             layouthandler = new Layouthandler();
+            layouthandler.tv_year = (TextView) row.findViewById(R.id.tv_year);
             layouthandler.tv_month = (TextView) row.findViewById(R.id.tv_month);
             layouthandler.tv_week = (TextView) row.findViewById(R.id.tv_week);
             layouthandler.tv_date = (TextView) row.findViewById(R.id.tv_date);
@@ -61,6 +62,7 @@ public class Listdataadapter extends ArrayAdapter {
 
         }
         Dataprovider dataprovider =(Dataprovider) this.getItem(position);
+        layouthandler.tv_year.setText(dataprovider.getYear());
         layouthandler.tv_month.setText(dataprovider.getMonth());
         layouthandler.tv_week.setText(dataprovider.getWeek());
         layouthandler.tv_date.setText(dataprovider.getDate());
@@ -72,7 +74,7 @@ public class Listdataadapter extends ArrayAdapter {
 
 
     static  class Layouthandler{
-        TextView tv_month,tv_week,tv_date,tv_category,tv_amount;
+        TextView tv_month,tv_week,tv_date,tv_category,tv_amount,tv_year;
 
     }
 }

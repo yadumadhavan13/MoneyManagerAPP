@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 public class MonthlyreportsearchActivity extends AppCompatActivity {
     EditText et_month_monthlyreportsactivity;
+    EditText et_year_monthlyreportsactivity;
 
 
     Button bt_search_monthlyreportsactivity;
@@ -25,7 +26,7 @@ public class MonthlyreportsearchActivity extends AppCompatActivity {
     TextView tv_totalmonthlyexpense;
     TextView tv_monthlybalance;
 
-    String search_month;
+    String search_month,search_year;
     String results = "";
     int total = 0;
     int totalexpense=0;
@@ -41,6 +42,7 @@ public class MonthlyreportsearchActivity extends AppCompatActivity {
         setContentView(R.layout.activity_monthlyreportsearch);
 
         et_month_monthlyreportsactivity = (EditText) findViewById(R.id.et_month_monthlyreportsactivity);
+        et_year_monthlyreportsactivity = (EditText) findViewById(R.id.et_year_monthlyreportsactivity);
 
 
         bt_search_monthlyreportsactivity = (Button) findViewById(R.id.bt_search_monthlyreportsactivity);
@@ -76,15 +78,19 @@ public class MonthlyreportsearchActivity extends AppCompatActivity {
     }
 
     public void searchmonthlyinfo(View view){
-        if (et_month_monthlyreportsactivity.getText().toString().length()==0){
+        if (et_year_monthlyreportsactivity.getText().toString().length()==0){
+            Toast.makeText(this, "Enter Month", Toast.LENGTH_SHORT).show();
+        }
+        else if (et_month_monthlyreportsactivity.getText().toString().length()==0){
             Toast.makeText(this, "Enter Month", Toast.LENGTH_SHORT).show();
         }
         else {
+            search_year = et_year_monthlyreportsactivity.getText().toString();
             search_month = et_month_monthlyreportsactivity.getText().toString();
 
             userDbhelper = new UserDbhelper(getApplicationContext());
             sqLiteDatabase = userDbhelper.getReadableDatabase();
-            cursor = userDbhelper.monthlyreport(search_month, sqLiteDatabase);
+            cursor = userDbhelper.monthlyreport(search_year,search_month, sqLiteDatabase);
             if (cursor.moveToFirst()) {
                 do {
                     results += cursor.getString(0);
@@ -96,6 +102,8 @@ public class MonthlyreportsearchActivity extends AppCompatActivity {
                     results += cursor.getString(3);
                     results += " ";
                     results += cursor.getString(4);
+                    results += " ";
+                    results += cursor.getString(5);
                     results += "\n";
                 } while (cursor.moveToNext());
             }
@@ -122,7 +130,7 @@ public class MonthlyreportsearchActivity extends AppCompatActivity {
         else{
             if (cursor.moveToFirst()){
                 do {
-                    total+= cursor.getInt(4);
+                    total+= cursor.getInt(5);
 
                 }while (cursor.moveToNext());
             }

@@ -29,13 +29,14 @@ public class DatalistActivity extends AppCompatActivity {
         if (cursor.moveToFirst()) {
 
             do {
-                String month,week,date,category,amount;
-                month = cursor.getString(0);
-                week = cursor.getString(1);
-                date = cursor.getString(2);
-                category = cursor.getString(3);
-                amount = cursor.getString(4);
-                Dataprovider dataprovider = new Dataprovider(month,week,date,category,amount);
+                String year,month,week,date,category,amount;
+                year = cursor.getString(0);
+                month = cursor.getString(1);
+                week = cursor.getString(2);
+                date = cursor.getString(3);
+                category = cursor.getString(4);
+                amount = cursor.getString(5);
+                Dataprovider dataprovider = new Dataprovider(year,month,week,date,category,amount);
                 listdataadapter.add(dataprovider);
 
             } while (cursor.moveToNext());

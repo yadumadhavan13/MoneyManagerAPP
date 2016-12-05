@@ -35,6 +35,8 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/money_manager_info" />
         </receiver>
+
+        <activity android:name=".YearlyreportsearchActivity"></activity>
     </application>
 
 </manifest>

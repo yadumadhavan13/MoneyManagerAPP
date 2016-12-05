@@ -16,7 +16,7 @@ public class UserDbhelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "USEREXPENSE.DB";
     private static final int DATABSE_VERSION = 1;
     private static final String CREATE_QUERY =
-            "CREATE TABLE "+ usercontract.newuserinfo.TABLE_NAME+"("+ usercontract.newuserinfo.EXPENSE_MONTH+" TEXT,"+ usercontract.newuserinfo.EXPENSE_WEEK+" TEXT,"+ usercontract.newuserinfo.EXPENSE_DATE+" TEXT,"+ usercontract.newuserinfo.EXPENSE_CATEGORY+" TEXT,"+ usercontract.newuserinfo.EXPENSE_AMOUNT+" TEXT);";
+            "CREATE TABLE "+ usercontract.newuserinfo.TABLE_NAME+"("+usercontract.newuserinfo.EXPENSE_YEAR+" TEXT,"+ usercontract.newuserinfo.EXPENSE_MONTH+" TEXT,"+ usercontract.newuserinfo.EXPENSE_WEEK+" TEXT,"+ usercontract.newuserinfo.EXPENSE_DATE+" TEXT,"+ usercontract.newuserinfo.EXPENSE_CATEGORY+" TEXT,"+ usercontract.newuserinfo.EXPENSE_AMOUNT+" TEXT);";
 
     public UserDbhelper(Context context) {
         super(context, DATABASE_NAME, null, DATABSE_VERSION);
@@ -39,8 +39,9 @@ public class UserDbhelper extends SQLiteOpenHelper {
 
     }
 
-    public void addinformation(String month,String week,String date,String category,String amount,SQLiteDatabase db){
+    public void addinformation(String year,String month,String week,String date,String category,String amount,SQLiteDatabase db){
         ContentValues contentValues = new ContentValues();
+        contentValues.put(usercontract.newuserinfo.EXPENSE_YEAR,year);
         contentValues.put(usercontract.newuserinfo.EXPENSE_MONTH,month);
         contentValues.put(usercontract.newuserinfo.EXPENSE_WEEK,week);
         contentValues.put(usercontract.newuserinfo.EXPENSE_DATE,date);
@@ -52,12 +53,12 @@ public class UserDbhelper extends SQLiteOpenHelper {
 
     public Cursor getinformaton(SQLiteDatabase db){
         Cursor cursor;
-        String [] projections = {usercontract.newuserinfo.EXPENSE_MONTH, usercontract.newuserinfo.EXPENSE_WEEK, usercontract.newuserinfo.EXPENSE_DATE, usercontract.newuserinfo.EXPENSE_CATEGORY, usercontract.newuserinfo.EXPENSE_AMOUNT};
+        String [] projections = {usercontract.newuserinfo.EXPENSE_YEAR,usercontract.newuserinfo.EXPENSE_MONTH, usercontract.newuserinfo.EXPENSE_WEEK, usercontract.newuserinfo.EXPENSE_DATE, usercontract.newuserinfo.EXPENSE_CATEGORY, usercontract.newuserinfo.EXPENSE_AMOUNT};
         cursor = db.query(usercontract.newuserinfo.TABLE_NAME,projections,null,null,null,null,null);
         return cursor;
     }
     public Cursor searchinformation(String search_category,SQLiteDatabase db){
-        String [] projections = {usercontract.newuserinfo.EXPENSE_MONTH,usercontract.newuserinfo.EXPENSE_WEEK,usercontract.newuserinfo.EXPENSE_DATE,usercontract.newuserinfo.EXPENSE_AMOUNT};
+        String [] projections = {usercontract.newuserinfo.EXPENSE_YEAR,usercontract.newuserinfo.EXPENSE_MONTH,usercontract.newuserinfo.EXPENSE_WEEK,usercontract.newuserinfo.EXPENSE_DATE,usercontract.newuserinfo.EXPENSE_AMOUNT};
         String selection = usercontract.newuserinfo.EXPENSE_CATEGORY+" LIKE ?";
         String[] selection_args ={search_category};
         Cursor cursor = db.query(usercontract.newuserinfo.TABLE_NAME,projections,selection,selection_args,null,null,null);
@@ -73,7 +74,7 @@ public class UserDbhelper extends SQLiteOpenHelper {
     }
 
     public Cursor search(String search_category,String search_date,String search_month,SQLiteDatabase db){
-        String [] projections = {usercontract.newuserinfo.EXPENSE_MONTH,usercontract.newuserinfo.EXPENSE_WEEK,usercontract.newuserinfo.EXPENSE_DATE,usercontract.newuserinfo.EXPENSE_CATEGORY,usercontract.newuserinfo.EXPENSE_AMOUNT};
+        String [] projections = {usercontract.newuserinfo.EXPENSE_YEAR,usercontract.newuserinfo.EXPENSE_MONTH,usercontract.newuserinfo.EXPENSE_WEEK,usercontract.newuserinfo.EXPENSE_DATE,usercontract.newuserinfo.EXPENSE_CATEGORY,usercontract.newuserinfo.EXPENSE_AMOUNT};
         String selection = usercontract.newuserinfo.EXPENSE_CATEGORY+" LIKE ? AND "+ usercontract.newuserinfo.EXPENSE_DATE+" LIKE ? AND "+ usercontract.newuserinfo.EXPENSE_MONTH+" LIKE ?";
         String[] selection_args ={search_category,search_date,search_month};
         Cursor cursor = db.query(usercontract.newuserinfo.TABLE_NAME,projections,selection,selection_args,null,null,null);
@@ -104,16 +105,26 @@ public class UserDbhelper extends SQLiteOpenHelper {
         return cursor;
     }
 
-    public Cursor monthlyreport(String search_month,SQLiteDatabase db){
-        String [] projections = {usercontract.newuserinfo.EXPENSE_MONTH,usercontract.newuserinfo.EXPENSE_WEEK,usercontract.newuserinfo.EXPENSE_DATE,usercontract.newuserinfo.EXPENSE_CATEGORY,usercontract.newuserinfo.EXPENSE_AMOUNT};
-        String selection = usercontract.newuserinfo.EXPENSE_MONTH+" LIKE ?";
-        String[] selection_args ={search_month};
+    public Cursor monthlyreport(String search_year,String search_month,SQLiteDatabase db){
+        String [] projections = {usercontract.newuserinfo.EXPENSE_YEAR,usercontract.newuserinfo.EXPENSE_MONTH,usercontract.newuserinfo.EXPENSE_WEEK,usercontract.newuserinfo.EXPENSE_DATE,usercontract.newuserinfo.EXPENSE_CATEGORY,usercontract.newuserinfo.EXPENSE_AMOUNT};
+        String selection = usercontract.newuserinfo.EXPENSE_YEAR+" LIKE ? AND "+ usercontract.newuserinfo.EXPENSE_MONTH+" LIKE ?";
+        String[] selection_args ={search_year,search_month};
         Cursor cursor = db.query(usercontract.newuserinfo.TABLE_NAME,projections,selection,selection_args,null,null,null);
         return cursor;
     }
 
-    public int updateinformation(String oldcategory,String olddate,String newmonth,String newweek,String newdate,String newcategory,String newamount,SQLiteDatabase db ){
+    public Cursor yearlyreport(String search_year,SQLiteDatabase db){
+        String [] projections = {usercontract.newuserinfo.EXPENSE_YEAR,usercontract.newuserinfo.EXPENSE_MONTH,usercontract.newuserinfo.EXPENSE_WEEK,usercontract.newuserinfo.EXPENSE_DATE,usercontract.newuserinfo.EXPENSE_CATEGORY,usercontract.newuserinfo.EXPENSE_AMOUNT};
+        String selection = usercontract.newuserinfo.EXPENSE_YEAR+" LIKE ?";
+        String[] selection_args ={search_year};
+        Cursor cursor = db.query(usercontract.newuserinfo.TABLE_NAME,projections,selection,selection_args,null,null,null);
+        return cursor;
+    }
+
+
+    public int updateinformation(String oldcategory,String olddate,String newyear,String newmonth,String newweek,String newdate,String newcategory,String newamount,SQLiteDatabase db ){
         ContentValues contentValues = new ContentValues();
+        contentValues.put(usercontract.newuserinfo.EXPENSE_YEAR,newyear);
         contentValues.put(usercontract.newuserinfo.EXPENSE_MONTH,newmonth);
         contentValues.put(usercontract.newuserinfo.EXPENSE_WEEK,newweek);
         contentValues.put(usercontract.newuserinfo.EXPENSE_DATE,newdate);

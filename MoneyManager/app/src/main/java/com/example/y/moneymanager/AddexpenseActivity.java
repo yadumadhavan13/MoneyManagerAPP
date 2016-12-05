@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 public class AddexpenseActivity extends AppCompatActivity {
+    EditText et_enteryear;
     EditText et_entermonth;
     EditText et_enterweek;
     EditText et_enterdate;
@@ -26,7 +27,7 @@ public class AddexpenseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_addexpense);
 
-
+        et_enteryear = (EditText) findViewById(R.id.et_enteryear);
         et_entermonth = (EditText) findViewById(R.id.et_entermonth);
         et_enterweek = (EditText) findViewById(R.id.et_enterweek);
         et_enterdate = (EditText) findViewById(R.id.et_enterdate);
@@ -44,7 +45,11 @@ public class AddexpenseActivity extends AppCompatActivity {
 
     }
     public void addexpense(View view){
-      if(et_entermonth.getText().toString().length()==0){
+        if(et_enteryear.getText().toString().length()==0){
+            Toast.makeText(context, "enter year", Toast.LENGTH_SHORT).show();
+            return;
+        }
+      else if(et_entermonth.getText().toString().length()==0){
           Toast.makeText(context, "enter month", Toast.LENGTH_SHORT).show();
           return;
       }
@@ -65,6 +70,7 @@ public class AddexpenseActivity extends AppCompatActivity {
             return;
         }
         else {
+            String year = et_enteryear.getText().toString();
             String month = et_entermonth.getText().toString();
             String week = et_enterweek.getText().toString();
             String date = et_enterdate.getText().toString();
@@ -73,7 +79,7 @@ public class AddexpenseActivity extends AppCompatActivity {
 
             userDbhelper = new UserDbhelper(context);
             sqLiteDatabase = userDbhelper.getWritableDatabase();
-            userDbhelper.addinformation(month, week, date, category, expense, sqLiteDatabase);
+            userDbhelper.addinformation(year,month, week, date, category, expense, sqLiteDatabase);
             Toast.makeText(context, "Data saved", Toast.LENGTH_SHORT).show();
             userDbhelper.close();
         }

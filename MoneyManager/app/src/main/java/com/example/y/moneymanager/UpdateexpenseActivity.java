@@ -21,11 +21,13 @@ public class UpdateexpenseActivity extends AppCompatActivity {
     EditText et_searchdate_updateexpenseactivity;
     EditText et_searchmonth_updateexpenseactivity;
 
+
     EditText et_newmonth_updateexpenseactivity;
     EditText et_newweek_updateexpenseactivity;
     EditText et_newdate_updateexpenseactivity;
     EditText et_newcategory_updateexpenseactivity;
     EditText et_newamount_updateexpenseactivity;
+    EditText et_newyear_updateexpenseactivity;
 
     Button bt_search_updateexpenseaactivity;
     Button bt_update_updateexpenseaactivity;
@@ -45,6 +47,7 @@ public class UpdateexpenseActivity extends AppCompatActivity {
         et_newdate_updateexpenseactivity = (EditText) findViewById(R.id.et_newdate_updateexpenseactivity);
         et_newcategory_updateexpenseactivity = (EditText) findViewById(R.id.et_newcategory_updateexpenseactivity);
         et_newamount_updateexpenseactivity = (EditText) findViewById(R.id.et_newamount_updateexpenseactivity);
+        et_newyear_updateexpenseactivity = (EditText) findViewById(R.id.et_newyear_updateexpenseactivity);
 
         bt_search_updateexpenseaactivity = (Button) findViewById(R.id.bt_search_updateexpenseactivity);
         bt_update_updateexpenseaactivity = (Button) findViewById(R.id.bt_update_updateexpenseactivity);
@@ -93,11 +96,13 @@ public class UpdateexpenseActivity extends AppCompatActivity {
             sqlitedatabase = userdbhelper.getReadableDatabase();
             Cursor cursor = userdbhelper.search(search_category,search_date,search_month,sqlitedatabase);
             if(cursor.moveToFirst()){
-               String month = cursor.getString(0);
-                String week = cursor.getString(1);
-                String date = cursor.getString(2);
-                String category = cursor.getString(3);
-                String amount  = cursor.getString(4);
+                String year = cursor.getString(0);
+               String month = cursor.getString(1);
+                String week = cursor.getString(2);
+                String date = cursor.getString(3);
+                String category = cursor.getString(4);
+                String amount  = cursor.getString(5);
+                et_newyear_updateexpenseactivity.setText(year);
                 et_newmonth_updateexpenseactivity.setText(month);
                 et_newweek_updateexpenseactivity.setText(week);
                 et_newdate_updateexpenseactivity.setText(date);
@@ -106,6 +111,7 @@ public class UpdateexpenseActivity extends AppCompatActivity {
                 Toast.makeText(this, "Results", Toast.LENGTH_SHORT).show();
             }
             else{
+                et_newyear_updateexpenseactivity.setText("");
                 et_newmonth_updateexpenseactivity.setText("");
                 et_newweek_updateexpenseactivity.setText("");
                 et_newdate_updateexpenseactivity.setText("");
@@ -122,7 +128,12 @@ public class UpdateexpenseActivity extends AppCompatActivity {
     }
 
     public void updateinfo(View view){
-        if(et_newmonth_updateexpenseactivity.getText().toString().length()==0){
+        if(et_newyear_updateexpenseactivity.getText().toString().length()==0){
+            Toast.makeText(this, "Enter new year", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        else if(et_newmonth_updateexpenseactivity.getText().toString().length()==0){
             Toast.makeText(this, "Enter new month", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -145,17 +156,19 @@ public class UpdateexpenseActivity extends AppCompatActivity {
         else {
             userdbhelper = new UserDbhelper(getApplicationContext());
             sqlitedatabase = userdbhelper.getWritableDatabase();
-            String month, week, date, category, amount;
+            String year,month, week, date, category, amount;
+            year = et_newyear_updateexpenseactivity.getText().toString();
             month = et_newmonth_updateexpenseactivity.getText().toString();
             week = et_newweek_updateexpenseactivity.getText().toString();
             date = et_newdate_updateexpenseactivity.getText().toString();
             category = et_newcategory_updateexpenseactivity.getText().toString();
             amount = et_newamount_updateexpenseactivity.getText().toString();
-            int count = userdbhelper.updateinformation(search_category, search_date, month, week, date, category, amount, sqlitedatabase);
+            int count = userdbhelper.updateinformation(search_category, search_date,year, month, week, date, category, amount, sqlitedatabase);
             Toast.makeText(this, "" + count + " Row Updated", Toast.LENGTH_SHORT).show();
         }
     }
     public void clearresults(View view){
+        et_newyear_updateexpenseactivity.setText("");
        et_searchmonth_updateexpenseactivity.setText("");
         et_searchcategory_updateexpenseactivity.setText("");
         et_searchdate_updateexpenseactivity.setText("");
